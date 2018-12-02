@@ -1,5 +1,8 @@
 # SPDX-License-Identifier: GPL-2.0
-r8188eu-y :=				\
+EXTRA_CFLAGS += -I$(src)/include
+EXTRA_CFLAGS += -I$(src)/hal/phydm
+
+rtl8188eu-y :=				\
 		core/rtw_ap.o		\
 		core/rtw_cmd.o		\
 		core/rtw_debug.o	\
@@ -52,6 +55,41 @@ r8188eu-y :=				\
 		os_dep/usb_ops_linux.o	\
 		os_dep/xmit_linux.o
 
-obj-$(CONFIG_R8188EU)	:= r8188eu.o
+SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ | sed -e s/ppc/powerpc/ | sed -e s/armv.l/arm/)
+ARCH ?= $(SUBARCH)
+CROSS_COMPILE ?=
+PWD := $(shell pwd)
+KSRC := /lib/modules/$(shell uname -r)/build
+MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless
+INSTALL_PREFIX :=
 
-ccflags-y += -I$(srctree)/$(src)/include
+ifneq ($(KERNELRELEASE),)
+
+obj-$(CONFIG_RTL8188EU) := rtl8188eu.o
+
+else
+
+export CONFIG_RTL8188EU = m
+
+all: modules
+
+modules:
+	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) M=$(PWD)  modules
+
+strip:
+	$(CROSS_COMPILE)strip 8188eu.ko --strip-unneeded
+
+.PHONY: modules clean
+
+clean: 	
+	rm -fr *.mod.c *./*.mod */*.o */.*.cmd *.ko *~
+	rm -fr .tmp_versions
+	rm -fr Module.symvers ; rm -fr Module.markers ; rm -fr modules.order
+endif
+
+help:
+	@echo "options :"
+	@echo "modules		build this module"
+	@echo "clean		clean"
+	@echo "RTLWIFI=y	use RTLWIFI from linux kernel not complete !!"
+
