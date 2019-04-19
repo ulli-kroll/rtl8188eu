@@ -154,7 +154,6 @@ static void loadparam(struct adapter *padapter, struct net_device *pnetdev)
 	registry_par->smart_ps =  (u8)rtw_smart_ps;
 	registry_par->power_mgnt = (u8)rtw_power_mgnt;
 	registry_par->ips_mode = (u8)rtw_ips_mode;
-	registry_par->mp_mode = 0;
 	registry_par->acm_method = (u8)rtw_acm_method;
 
 	 /* UAPSD */

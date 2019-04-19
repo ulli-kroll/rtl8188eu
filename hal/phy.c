@@ -994,10 +994,7 @@ static void phy_iq_calibrate(struct adapter *adapt, s32 result[][8],
 
 	u32 retry_count = 9;
 
-	if (*(dm_odm->mp_mode) == 1)
-		retry_count = 9;
-	else
-		retry_count = 2;
+	retry_count = 2;
 
 	if (t == 0) {
 		/*  Save ADDA parameters, turn Path A ADDA on */

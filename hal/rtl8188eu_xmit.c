@@ -170,11 +170,9 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
 	struct mlme_ext_priv *pmlmeext = &adapt->mlmeextpriv;
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	if (adapt->registrypriv.mp_mode == 0) {
-		if ((!bagg_pkt) && (urb_zero_packet_chk(adapt, sz) == 0)) {
-			ptxdesc = (struct tx_desc *)(pmem+PACKET_OFFSET_SZ);
-			pull = 1;
-		}
+	if ((!bagg_pkt) && (urb_zero_packet_chk(adapt, sz) == 0)) {
+		ptxdesc = (struct tx_desc *)(pmem+PACKET_OFFSET_SZ);
+		pull = 1;
 	}
 
 	memset(ptxdesc, 0, sizeof(struct tx_desc));
@@ -190,11 +188,9 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
 	if (is_multicast_ether_addr(pattrib->ra))
 		ptxdesc->txdw0 |= cpu_to_le32(BMC);
 
-	if (adapt->registrypriv.mp_mode == 0) {
-		if (!bagg_pkt) {
-			if ((pull) && (pxmitframe->pkt_offset > 0))
-				pxmitframe->pkt_offset = pxmitframe->pkt_offset - 1;
-		}
+	if (!bagg_pkt) {
+		if ((pull) && (pxmitframe->pkt_offset > 0))
+			pxmitframe->pkt_offset = pxmitframe->pkt_offset - 1;
 	}
 
 	/*  pkt_offset, unit:8 bytes padding */

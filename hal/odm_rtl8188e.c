@@ -13,13 +13,6 @@ static void dm_rx_hw_antena_div_init(struct odm_dm_struct *dm_odm)
 	struct adapter *adapter = dm_odm->Adapter;
 	u32 value32;
 
-	if (*(dm_odm->mp_mode) == 1) {
-		dm_odm->AntDivType = CGCS_RX_SW_ANTDIV;
-		phy_set_bb_reg(adapter, ODM_REG_IGI_A_11N, BIT(7), 0);
-		phy_set_bb_reg(adapter, ODM_REG_LNA_SWITCH_11N, BIT(31), 1);
-		return;
-	}
-
 	/* MAC Setting */
 	value32 = phy_query_bb_reg(adapter, ODM_REG_ANTSEL_PIN_11N, bMaskDWord);
 	phy_set_bb_reg(adapter, ODM_REG_ANTSEL_PIN_11N, bMaskDWord,
@@ -43,14 +36,6 @@ static void dm_trx_hw_antenna_div_init(struct odm_dm_struct *dm_odm)
 {
 	struct adapter *adapter = dm_odm->Adapter;
 	u32	value32;
-
-	if (*(dm_odm->mp_mode) == 1) {
-		dm_odm->AntDivType = CGCS_RX_SW_ANTDIV;
-		phy_set_bb_reg(adapter, ODM_REG_IGI_A_11N, BIT(7), 0);
-		phy_set_bb_reg(adapter, ODM_REG_RX_ANT_CTRL_11N,
-			       BIT(5) | BIT(4) | BIT(3), 0);
-		return;
-	}
 
 	/* MAC Setting */
 	value32 = phy_query_bb_reg(adapter, ODM_REG_ANTSEL_PIN_11N, bMaskDWord);
@@ -89,10 +74,6 @@ static void dm_fast_training_init(struct odm_dm_struct *dm_odm)
 	u32 value32, i;
 	struct fast_ant_train *dm_fat_tbl = &dm_odm->DM_FatTable;
 	u32 AntCombination = 2;
-
-	if (*(dm_odm->mp_mode) == 1) {
-		return;
-	}
 
 	for (i = 0; i < 6; i++) {
 		dm_fat_tbl->Bssid[i] = 0;

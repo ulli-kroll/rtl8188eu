@@ -86,11 +86,6 @@ static void Update_ODM_ComInfo_88E(struct adapter *Adapter)
 	if (hal_data->AntDivCfg)
 		pdmpriv->InitODMFlag |= ODM_BB_ANT_DIV;
 
-	if (Adapter->registrypriv.mp_mode == 1) {
-		pdmpriv->InitODMFlag =	ODM_RF_CALIBRATION |
-					ODM_RF_TX_PWR_TRACK;
-	}
-
 	dm_odm->SupportAbility = pdmpriv->InitODMFlag;
 
 	dm_odm->pNumTxBytesUnicast = &Adapter->xmitpriv.tx_bytes;
@@ -101,7 +96,6 @@ static void Update_ODM_ComInfo_88E(struct adapter *Adapter)
 	dm_odm->pBandWidth = (u8 *)&hal_data->CurrentChannelBW;
 	dm_odm->pChannel = &hal_data->CurrentChannel;
 	dm_odm->pbNet_closed = (bool *)&Adapter->net_closed;
-	dm_odm->mp_mode = &Adapter->registrypriv.mp_mode;
 	dm_odm->pbScanInProcess = (bool *)&pmlmepriv->bScanInProcess;
 	dm_odm->pbPowerSaving = (bool *)&pwrctrlpriv->bpower_saving;
 	dm_odm->AntDivType = hal_data->TRxAntDivType;

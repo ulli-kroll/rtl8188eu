@@ -706,10 +706,7 @@ u32 rtl8188eu_hal_init(struct adapter *Adapter)
 	_InitTxBufferBoundary(Adapter, 0);
 
 	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_DOWNLOAD_FW);
-	if (Adapter->registrypriv.mp_mode == 1) {
-		_InitRxSetting(Adapter);
-		Adapter->bFWReady = false;
-	} else {
+	{
 		status = rtl88eu_download_fw(Adapter);
 
 		if (status) {
